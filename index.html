@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Longtail scenario</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">Longtail scenario</p>
+        <h1>Longtail scenario</h1>
+        <p class="intro">
+          Each scenario is shown as a simple flow: base animation, query input, then
+          the control result.
+        </p>
+      </section>
+
+      <section class="grid" id="demo-grid" aria-label="Scenario demos"></section>
+    </main>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <div class="lightbox-backdrop" data-close="true"></div>
+      <section
+        class="lightbox-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lightbox-title"
+      >
+        <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close">
+          Close
+        </button>
+        <header class="lightbox-header">
+          <p class="card-label">Focused View</p>
+          <h2 class="lightbox-title" id="lightbox-title"></h2>
+        </header>
+        <div class="lightbox-flow">
+          <section class="media-panel lightbox-media">
+            <p class="panel-title">Base</p>
+            <img class="lightbox-base" alt="" />
+          </section>
+
+          <div class="operator" aria-hidden="true">+</div>
+
+          <section class="query-panel lightbox-media">
+            <p class="panel-title">Query</p>
+            <img class="lightbox-query" alt="" />
+          </section>
+
+          <div class="operator arrow" aria-hidden="true">→</div>
+
+          <section class="media-panel lightbox-media">
+            <p class="panel-title">Control</p>
+            <img class="lightbox-control" alt="" />
+          </section>
+        </div>
+      </section>
+    </div>
+
+    <template id="card-template">
+      <article class="card" tabindex="0" role="button" aria-label="">
+        <header class="card-header">
+          <div>
+            <p class="card-label">Scenario</p>
+            <h2 class="card-title"></h2>
+          </div>
+          <span class="card-tag"></span>
+        </header>
+
+        <div class="flow">
+          <section class="media-panel">
+            <p class="panel-title">Base</p>
+            <img class="base-image" alt="" loading="lazy" />
+          </section>
+
+          <div class="operator" aria-hidden="true">+</div>
+
+          <section class="query-panel">
+            <p class="panel-title">Query</p>
+            <img class="query-image" alt="" loading="lazy" />
+          </section>
+
+          <div class="operator arrow" aria-hidden="true">→</div>
+
+          <section class="media-panel">
+            <p class="panel-title">Control</p>
+            <img class="control-image" alt="" loading="lazy" />
+          </section>
+        </div>
+      </article>
+    </template>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
