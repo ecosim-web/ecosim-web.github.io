@@ -92,6 +92,29 @@ const prevButton = document.querySelector("#scenario-prev");
 const nextButton = document.querySelector("#scenario-next");
 
 let activeIndex = 0;
+const preloadedAssets = new Set();
+
+function preloadAsset(src) {
+  if (preloadedAssets.has(src)) {
+    return;
+  }
+  const image = new Image();
+  image.src = src;
+  preloadedAssets.add(src);
+}
+
+function swapImage(imageElement, src, alt, resetAnimation = false) {
+  imageElement.alt = alt;
+
+  if (!resetAnimation) {
+    imageElement.src = src;
+    return;
+  }
+
+  imageElement.removeAttribute("src");
+  void imageElement.offsetWidth;
+  imageElement.src = `${src}?play=${Date.now()}`;
+}
 
 function renderScenario(index) {
   const scenario = scenarios[index];
@@ -101,14 +124,13 @@ function renderScenario(index) {
   shortLabel.textContent = scenario.short;
   idLabel.textContent = `ID ${scenario.id}`;
 
-  baseImage.src = scenario.base;
-  baseImage.alt = `${scenario.title} base simulation`;
+  preloadAsset(scenario.base);
+  preloadAsset(scenario.control);
+  preloadAsset(scenario.query);
 
-  queryImage.src = scenario.query;
-  queryImage.alt = `${scenario.title} condition image`;
-
-  controlImage.src = scenario.control;
-  controlImage.alt = `${scenario.title} controlled simulation`;
+  swapImage(baseImage, scenario.base, `${scenario.title} base simulation`, true);
+  swapImage(queryImage, scenario.query, `${scenario.title} condition image`);
+  swapImage(controlImage, scenario.control, `${scenario.title} controlled simulation`, true);
 }
 
 scenarios.forEach((scenario, index) => {
@@ -116,6 +138,9 @@ scenarios.forEach((scenario, index) => {
   option.value = scenario.id;
   option.textContent = `${scenario.short} - ${scenario.title}`;
   select.appendChild(option);
+  preloadAsset(scenario.base);
+  preloadAsset(scenario.control);
+  preloadAsset(scenario.query);
 
   if (index === 0) {
     renderScenario(0);
