@@ -1,7 +1,8 @@
 const scenarios = [
   {
     id: "011",
-    title: "Scenario 01",
+    title: "Stopping Car Threading",
+    short: "Scenario 01",
     query:
       "./assets/query/query_011_28f915e5f267613d_q1525__cd2ced934eff529d_d239_r12_comparison_static.png",
     base: "./assets/base/crop_011_28f915e5f267613d_q1525__cd2ced934eff529d_d239_r12_comparison.gif",
@@ -10,7 +11,8 @@ const scenarios = [
   },
   {
     id: "035",
-    title: "Scenario 02",
+    title: "Cyclist Plaza Turn",
+    short: "Scenario 02",
     query:
       "./assets/query/query_035_3b169f26d15c4914_q1975__8a7281e087e9ffa2_d2211_r6_comparison_static.png",
     base: "./assets/base/crop_035_3b169f26d15c4914_q1975__8a7281e087e9ffa2_d2211_r6_comparison.gif",
@@ -19,7 +21,8 @@ const scenarios = [
   },
   {
     id: "088",
-    title: "Scenario 03",
+    title: "Unsignalized Crossing",
+    short: "Scenario 03",
     query:
       "./assets/query/query_088_861485a5735c6b40_q117__fa1c0d98bc18f290_d2612_r29_comparison_static.png",
     base: "./assets/base/crop_088_861485a5735c6b40_q117__fa1c0d98bc18f290_d2612_r29_comparison.gif",
@@ -28,7 +31,8 @@ const scenarios = [
   },
   {
     id: "116",
-    title: "Scenario 04",
+    title: "Meandering",
+    short: "Scenario 04",
     query:
       "./assets/query/query_116_8f5f743b5b1ff851_q110__cb9aca00b2fc880f_d1457_r27_comparison_static.png",
     base: "./assets/base/crop_116_8f5f743b5b1ff851_q110__cb9aca00b2fc880f_d1457_r27_comparison.gif",
@@ -37,7 +41,8 @@ const scenarios = [
   },
   {
     id: "130",
-    title: "Scenario 05",
+    title: "Multi-Lane Weaving",
+    short: "Scenario 05",
     query:
       "./assets/query/query_130_97dc2441f6ed2318_q15__8e8fbe0fdb5b1ded_d157_r11_comparison_static.png",
     base: "./assets/base/crop_130_97dc2441f6ed2318_q15__8e8fbe0fdb5b1ded_d157_r11_comparison.gif",
@@ -46,7 +51,8 @@ const scenarios = [
   },
   {
     id: "163",
-    title: "Scenario 06",
+    title: "Tight Merging",
+    short: "Scenario 06",
     query:
       "./assets/query/query_163_d0d511073be892c8_q62__764cc0f4b15c9c38_d1063_r14_comparison_static.png",
     base: "./assets/base/crop_163_d0d511073be892c8_q62__764cc0f4b15c9c38_d1063_r14_comparison.gif",
@@ -55,7 +61,8 @@ const scenarios = [
   },
   {
     id: "194",
-    title: "Scenario 07",
+    title: "Fork Merge Turn",
+    short: "Scenario 07",
     query:
       "./assets/query/query_194_e4f0f9239a41acb0_q28__1990a2a1f3af41e4_d2820_r15_comparison_static.png",
     base: "./assets/base/crop_194_e4f0f9239a41acb0_q28__1990a2a1f3af41e4_d2820_r15_comparison.gif",
@@ -64,7 +71,8 @@ const scenarios = [
   },
   {
     id: "231",
-    title: "Scenario 08",
+    title: "Aggressive U-turn Parking",
+    short: "Scenario 08",
     query:
       "./assets/query/query_231_e730e70ec662302f_q1848__53489c151a69167c_d2166_r22_comparison_static.png",
     base: "./assets/base/crop_231_e730e70ec662302f_q1848__53489c151a69167c_d2166_r22_comparison.gif",
@@ -73,74 +81,58 @@ const scenarios = [
   },
 ];
 
-const grid = document.querySelector("#demo-grid");
-const template = document.querySelector("#card-template");
-const lightbox = document.querySelector("#lightbox");
-const lightboxClose = document.querySelector("#lightbox-close");
-const lightboxTitle = document.querySelector(".lightbox-title");
-const lightboxBase = document.querySelector(".lightbox-base");
-const lightboxQuery = document.querySelector(".lightbox-query");
-const lightboxControl = document.querySelector(".lightbox-control");
+const select = document.querySelector("#scenario-select");
+const title = document.querySelector("#scenario-title");
+const shortLabel = document.querySelector("#scenario-short");
+const idLabel = document.querySelector("#scenario-id");
+const baseImage = document.querySelector(".showcase-base");
+const queryImage = document.querySelector(".showcase-query");
+const controlImage = document.querySelector(".showcase-control");
+const prevButton = document.querySelector("#scenario-prev");
+const nextButton = document.querySelector("#scenario-next");
 
-function openLightbox(scenario) {
-  lightboxTitle.textContent = `${scenario.title} · ${scenario.id}`;
-  lightboxBase.src = scenario.base;
-  lightboxBase.alt = `${scenario.title} base scenario animation`;
-  lightboxQuery.src = scenario.query;
-  lightboxQuery.alt = `${scenario.title} query image`;
-  lightboxControl.src = scenario.control;
-  lightboxControl.alt = `${scenario.title} control result animation`;
-  lightbox.classList.add("is-open");
-  lightbox.setAttribute("aria-hidden", "false");
-  document.body.style.overflow = "hidden";
-}
+let activeIndex = 0;
 
-function closeLightbox() {
-  lightbox.classList.remove("is-open");
-  lightbox.setAttribute("aria-hidden", "true");
-  document.body.style.overflow = "";
-}
+function renderScenario(index) {
+  const scenario = scenarios[index];
+  activeIndex = index;
+  select.value = scenario.id;
+  title.textContent = scenario.title;
+  shortLabel.textContent = scenario.short;
+  idLabel.textContent = `ID ${scenario.id}`;
 
-scenarios.forEach((scenario) => {
-  const card = template.content.cloneNode(true);
-  const cardRoot = card.querySelector(".card");
-
-  cardRoot.querySelector(".card-title").textContent = `${scenario.title} · ${scenario.id}`;
-  cardRoot.querySelector(".card-tag").textContent = scenario.id;
-  cardRoot.setAttribute("aria-label", `Open ${scenario.title} ${scenario.id} in focused view`);
-
-  const queryImage = cardRoot.querySelector(".query-image");
-  queryImage.src = scenario.query;
-  queryImage.alt = `${scenario.title} query image`;
-
-  const baseImage = cardRoot.querySelector(".base-image");
   baseImage.src = scenario.base;
-  baseImage.alt = `${scenario.title} base scenario animation`;
+  baseImage.alt = `${scenario.title} base simulation`;
 
-  const controlImage = cardRoot.querySelector(".control-image");
+  queryImage.src = scenario.query;
+  queryImage.alt = `${scenario.title} condition image`;
+
   controlImage.src = scenario.control;
-  controlImage.alt = `${scenario.title} control result animation`;
+  controlImage.alt = `${scenario.title} controlled simulation`;
+}
 
-  cardRoot.addEventListener("click", () => openLightbox(scenario));
-  cardRoot.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      openLightbox(scenario);
-    }
-  });
+scenarios.forEach((scenario, index) => {
+  const option = document.createElement("option");
+  option.value = scenario.id;
+  option.textContent = `${scenario.short} - ${scenario.title}`;
+  select.appendChild(option);
 
-  grid.appendChild(card);
-});
-
-lightboxClose.addEventListener("click", closeLightbox);
-lightbox.addEventListener("click", (event) => {
-  if (event.target.dataset.close === "true") {
-    closeLightbox();
+  if (index === 0) {
+    renderScenario(0);
   }
 });
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
-    closeLightbox();
+select.addEventListener("change", (event) => {
+  const index = scenarios.findIndex((scenario) => scenario.id === event.target.value);
+  if (index >= 0) {
+    renderScenario(index);
   }
+});
+
+prevButton.addEventListener("click", () => {
+  renderScenario((activeIndex - 1 + scenarios.length) % scenarios.length);
+});
+
+nextButton.addEventListener("click", () => {
+  renderScenario((activeIndex + 1) % scenarios.length);
 });

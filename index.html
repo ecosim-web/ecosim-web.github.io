@@ -3,7 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Longtail scenario</title>
+    <title>ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation</title>
+    <meta
+      name="description"
+      content="Academic project page for ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,89 +17,206 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="page">
-      <section class="hero">
-        <p class="eyebrow">Longtail scenario</p>
-        <h1>Longtail scenario</h1>
-        <p class="intro">
-          Each scenario is shown as a simple flow: base animation, query input, then
-          the control result.
-        </p>
-      </section>
-
-      <section class="grid" id="demo-grid" aria-label="Scenario demos"></section>
-    </main>
-
-    <div class="lightbox" id="lightbox" aria-hidden="true">
-      <div class="lightbox-backdrop" data-close="true"></div>
-      <section
-        class="lightbox-panel"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="lightbox-title"
-      >
-        <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close">
-          Close
-        </button>
-        <header class="lightbox-header">
-          <p class="card-label">Focused View</p>
-          <h2 class="lightbox-title" id="lightbox-title"></h2>
-        </header>
-        <div class="lightbox-flow">
-          <section class="media-panel lightbox-media">
-            <p class="panel-title">Base</p>
-            <img class="lightbox-base" alt="" />
-          </section>
-
-          <div class="operator" aria-hidden="true">+</div>
-
-          <section class="query-panel lightbox-media">
-            <p class="panel-title">Query</p>
-            <img class="lightbox-query" alt="" />
-          </section>
-
-          <div class="operator arrow" aria-hidden="true">→</div>
-
-          <section class="media-panel lightbox-media">
-            <p class="panel-title">Control</p>
-            <img class="lightbox-control" alt="" />
-          </section>
-        </div>
-      </section>
-    </div>
-
-    <template id="card-template">
-      <article class="card" tabindex="0" role="button" aria-label="">
-        <header class="card-header">
-          <div>
-            <p class="card-label">Scenario</p>
-            <h2 class="card-title"></h2>
+    <main class="page-shell">
+      <section class="hero section">
+        <div class="hero-copy">
+          <h1>ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation</h1>
+          <p class="authors">Anonymous</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#abstract">Paper</a>
+            <a class="button button-secondary" href="#bibtex">Code</a>
           </div>
-          <span class="card-tag"></span>
-        </header>
-
-        <div class="flow">
-          <section class="media-panel">
-            <p class="panel-title">Base</p>
-            <img class="base-image" alt="" loading="lazy" />
-          </section>
-
-          <div class="operator" aria-hidden="true">+</div>
-
-          <section class="query-panel">
-            <p class="panel-title">Query</p>
-            <img class="query-image" alt="" loading="lazy" />
-          </section>
-
-          <div class="operator arrow" aria-hidden="true">→</div>
-
-          <section class="media-panel">
-            <p class="panel-title">Control</p>
-            <img class="control-image" alt="" loading="lazy" />
-          </section>
         </div>
-      </article>
-    </template>
+      </section>
+
+      <section class="section section-narrow" id="teaser">
+        <article class="card figure-card">
+          <div class="figure-image-wrap figure-image-wrap-teaser">
+            <img
+              class="figure-image"
+              src="./assets/teaserv2.png?v=2"
+              alt="Teaser figure for ECoSim showing data-efficient multi-modal control of pretrained traffic models."
+            />
+          </div>
+          <p class="figure-caption">
+            <strong>Fig. 1:</strong> Data-Efficient Multi-Modal Control of Pretrained
+            Traffic Models. We introduce a data-efficient adaptation framework that
+            steers frozen traffic simulators via sketch, latent, or text signals.
+            Utilizing only 1% of training data, it transforms unconditioned pretrained
+            traffic model into precise, user-defined maneuvers without compromising
+            the base generative prior.
+          </p>
+        </article>
+      </section>
+
+      <section class="section section-narrow" id="abstract">
+        <div class="section-heading">
+          <h2>Abstract</h2>
+        </div>
+        <article class="card abstract-card">
+          <p>
+            Controllable traffic simulation is critical for testing autonomous driving
+            systems, yet existing approaches often require retraining large generative
+            models with extensive annotated data. We introduce a lightweight control
+            adaptation framework that endows frozen state-of-the-art traffic models,
+            including both diffusion and autoregressive backbones, with multi-modal
+            controllability through sketch, latent behavior codes, and text.
+          </p>
+          <p>
+            By modulating intermediate features through identity-initialized FiLM
+            layers, our method enables precise control while preserving the base
+            model's generative prior. Evaluated on Waymo Open Sim Agents Challenge,
+            our approach demonstrates strong controllability with less than 1% of the
+            training data.
+          </p>
+          <p>
+            Furthermore, through context-aware condition transfer, our framework
+            enables counterfactual scenario generation and long-tail synthesis while
+            maintaining stable closed-loop driving realism and safety.
+          </p>
+        </article>
+      </section>
+
+      <section class="section" id="method">
+        <div class="section-heading">
+          <h2>Method Overview</h2>
+        </div>
+        <div class="figure-stack">
+          <article class="card figure-card figure-card-wide">
+            <div class="figure-image-wrap">
+              <img
+                class="figure-image"
+                src="./assets/ctrl_architecturev2.png?v=2"
+                alt="Model-agnostic control adaptation architecture diagram."
+              />
+            </div>
+            <p class="figure-caption">
+              <strong>Fig. 2:</strong> Model-Agnostic Control Adaptation Architecture.
+              A lightweight adapter injects multi-modal control signals into a frozen
+              pretrained traffic model by predicting FiLM parameters (γ, β) that
+              modulate intermediate features h. The design is compatible with both
+              autoregressive and diffusion backbones, and identity initialization
+              preserves the base model's generative prior.
+            </p>
+          </article>
+
+          <article class="card figure-card figure-card-wide">
+            <div class="figure-image-wrap">
+              <img
+                class="figure-image"
+                src="./assets/BehaviorVAE.png?v=2"
+                alt="BehaviorVAE overview diagram."
+              />
+            </div>
+            <p class="figure-caption">
+              <strong>Fig. 3:</strong> BehaviorVAE overview. Agent trajectories and
+              scene context are encoded into a Gaussian latent posterior;
+              reparameterized per-agent latents are decoded for trajectory
+              reconstruction and exported as paired latent codes in a single forward
+              pass.
+            </p>
+          </article>
+
+          <article class="card figure-card figure-card-wide">
+            <div class="figure-image-wrap">
+              <img
+                class="figure-image"
+                src="./assets/contextmatch.png?v=2"
+                alt="Context-match retrieval pipeline diagram."
+              />
+            </div>
+            <p class="figure-caption">
+              <strong>Fig. 4:</strong> Context-Match Retrieval Pipeline. Query agents
+              are encoded into a shared embedding space. Following heuristic filtering
+              for dynamic feasibility, candidates are ranked via similarity scoring to
+              retrieve the Top-K environmentally compatible scenarios from the dataset.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-narrow" id="video">
+        <div class="section-heading">
+          <h2>Video</h2>
+        </div>
+        <div class="video-frame">
+          <iframe
+            src="https://www.youtube.com/embed/dyRz06b-qsM"
+            title="ECoSim qualitative results video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </section>
+
+      <section class="section" id="qualitative">
+        <div class="section-heading">
+          <h2>Long-tail Results</h2>
+        </div>
+        <div class="card selector-card">
+          <div class="selector-bar">
+            <label class="selector-label" for="scenario-select">Select scenario</label>
+            <div class="selector-controls">
+              <button class="mini-button" id="scenario-prev" type="button">Previous</button>
+              <select id="scenario-select" aria-label="Select qualitative scenario"></select>
+              <button class="mini-button" id="scenario-next" type="button">Next</button>
+            </div>
+          </div>
+
+          <div class="scenario-meta">
+            <div>
+              <p class="scenario-kicker" id="scenario-short"></p>
+              <h3 id="scenario-title"></h3>
+            </div>
+            <p class="scenario-id" id="scenario-id"></p>
+          </div>
+
+          <div class="showcase-flow" aria-live="polite">
+            <section class="media-panel">
+              <p class="panel-title">Base</p>
+              <img class="showcase-base" alt="" />
+            </section>
+
+            <div class="operator" aria-hidden="true">+</div>
+
+            <section class="query-panel">
+              <p class="panel-title">Query</p>
+              <img class="showcase-query" alt="" />
+            </section>
+
+            <div class="operator arrow" aria-hidden="true">→</div>
+
+            <section class="media-panel">
+              <p class="panel-title">Control</p>
+              <img class="showcase-control" alt="" />
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-narrow" id="bibtex">
+        <div class="section-heading">
+          <h2>BibTeX</h2>
+        </div>
+        <article class="card bibtex-card">
+          <pre><code>@inproceedings{ecosim,
+  title={ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation},
+  author={Anonymous},
+  booktitle={},
+  year={}
+}</code></pre>
+          <p class="bibtex-note">For more details, please check our paper.</p>
+        </article>
+      </section>
+
+      <footer class="site-footer">
+        <p>
+          This website is licensed under a Creative Commons
+          Attribution-ShareAlike 4.0 International License.
+        </p>
+      </footer>
+    </main>
 
     <script src="./script.js"></script>
   </body>
