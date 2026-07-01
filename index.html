@@ -21,7 +21,12 @@
       <section class="hero section">
         <div class="hero-copy">
           <h1>ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation</h1>
-          <p class="authors">Anonymous</p>
+          <p class="venue">ECCV 2026</p>
+          <p class="authors">
+            Yu-Hsiang Chen<sup>*</sup>, Wei-Jer Chang<sup>*</sup>, Yi-Ting Chen,
+            Masayoshi Tomizuka
+          </p>
+          <p class="author-note"><sup>*</sup> Equal contribution</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#abstract">Paper</a>
             <a class="button button-secondary" href="#bibtex">Code</a>
@@ -41,10 +46,10 @@
           <p class="figure-caption">
             <strong>Fig. 1:</strong> Data-Efficient Multi-Modal Control of Pretrained
             Traffic Models. We introduce a data-efficient adaptation framework that
-            steers frozen traffic simulators via sketch, latent, or text signals.
-            Utilizing only 1% of training data, it transforms unconditioned pretrained
-            traffic model into precise, user-defined maneuvers without compromising
-            the base generative prior.
+            steers frozen traffic models via sketch, latent, or text signals. Using
+            only 1% of the paired control data, the framework adds new control
+            modalities and enables targeted generation of diverse user-specified
+            traffic scenarios while preserving the pretrained model's performance.
           </p>
         </article>
       </section>
@@ -58,21 +63,24 @@
             Controllable traffic simulation is critical for testing autonomous driving
             systems, yet existing approaches often require retraining large generative
             models with extensive annotated data. We introduce a lightweight control
-            adaptation framework that endows frozen state-of-the-art traffic models,
-            including both diffusion and autoregressive backbones, with multi-modal
-            controllability through sketch, latent behavior codes, and text.
+            adaptation framework that enables multi-modal controllability (sketch,
+            latent behavior codes, and text) for pretrained state-of-the-art diffusion
+            and autoregressive traffic models.
           </p>
           <p>
             By modulating intermediate features through identity-initialized FiLM
-            layers, our method enables precise control while preserving the base
-            model's generative prior. Evaluated on Waymo Open Sim Agents Challenge,
-            our approach demonstrates strong controllability with less than 1% of the
-            training data.
+            layers, our method efficiently adds new control modalities while
+            preserving the base model's generative prior. Evaluated on Waymo Open Sim
+            Agents Challenge, our approach demonstrates strong controllability with
+            less than 1% of the paired control data.
           </p>
           <p>
-            Furthermore, through context-aware condition transfer, our framework
-            enables counterfactual scenario generation and long-tail synthesis while
-            maintaining stable closed-loop driving realism and safety.
+            Through context-aware condition transfer, our framework enables
+            counterfactual scenario generation and long-tail synthesis while
+            maintaining stable closed-loop driving realism and safety. Our framework
+            unlocks new possibilities for controllable traffic simulation, enabling
+            targeted scenario generation through lightweight adaptation of pretrained
+            generative models.
           </p>
         </article>
       </section>
@@ -154,7 +162,7 @@
 
       <section class="section" id="qualitative">
         <div class="section-heading">
-          <h2>Long-tail Results</h2>
+          <h2>Long-tail Scenario generation</h2>
         </div>
         <div class="card selector-card">
           <div class="selector-bar">
@@ -204,9 +212,9 @@
         <article class="card bibtex-card">
           <pre><code>@inproceedings{ecosim,
   title={ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation},
-  author={Anonymous},
-  booktitle={},
-  year={}
+  author={Chen, Yu-Hsiang and Chang, Wei-Jer and Chen, Yi-Ting and Tomizuka, Masayoshi},
+  booktitle={European Conference on Computer Vision (ECCV)},
+  year={2026}
 }</code></pre>
           <p class="bibtex-note">For more details, please check our paper.</p>
         </article>
