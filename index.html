@@ -6,7 +6,7 @@
     <title>ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation</title>
     <meta
       name="description"
-      content="Academic project page for ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation."
+      content="Add sketch, latent, and text control to frozen traffic models with lightweight adapters. Explore ECoSim's results, data efficiency, and scenario generation."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,13 +23,20 @@
           <h1>ECoSim: Data Efficient Fine-Tuning for Controllable Traffic Simulation</h1>
           <p class="venue">ECCV 2026</p>
           <p class="authors">
-            Yu-Hsiang Chen<sup>*</sup>, Wei-Jer Chang<sup>*</sup>, Yi-Ting Chen,
-            Masayoshi Tomizuka
+            Yu-Hsiang Chen<sup>1,2*</sup>, Wei-Jer Chang<sup>2*</sup>, Yi-Ting Chen<sup>1</sup>,
+            Masayoshi Tomizuka<sup>2</sup>
           </p>
+          <p class="affiliations"><span><sup>1</sup> National Yang Ming Chiao Tung University</span><span><sup>2</sup> University of California, Berkeley</span></p>
           <p class="author-note"><sup>*</sup> Equal contribution</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="https://arxiv.org/abs/2607.00545">Paper</a>
-            <a class="button button-secondary" href="https://github.com/bob020416/ecosim">Code</a>
+            <a class="button button-primary" href="https://arxiv.org/abs/2607.00545">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 12h6M9 16h6"/></svg>
+              <span>Paper</span>
+            </a>
+            <a class="button button-primary" href="https://github.com/bob020416/ecosim">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-14-2 16"/></svg>
+              <span>Code</span>
+            </a>
           </div>
         </div>
       </section>
@@ -44,12 +51,7 @@
             />
           </div>
           <p class="figure-caption">
-            <strong>Fig. 1:</strong> Data-Efficient Multi-Modal Control of Pretrained
-            Traffic Models. We introduce a data-efficient adaptation framework that
-            steers frozen traffic models via sketch, latent, or text signals. Using
-            only 1% of the paired control data, the framework adds new control
-            modalities and enables targeted generation of diverse user-specified
-            traffic scenarios while preserving the pretrained model's performance.
+            <strong>Three ways to specify behavior:</strong> sketch a path, transfer a reference behavior through a latent code, or describe an intent in text.
           </p>
         </article>
       </section>
@@ -116,54 +118,147 @@
               />
             </div>
             <p class="figure-caption">
-              <strong>Fig. 2:</strong> Model-Agnostic Control Adaptation Architecture.
-              A lightweight adapter injects multi-modal control signals into a frozen
-              pretrained traffic model by predicting FiLM parameters (γ, β) that
-              modulate intermediate features h. The design is compatible with both
-              autoregressive and diffusion backbones, and identity initialization
-              preserves the base model's generative prior.
+              <strong>Train the control branch; freeze the traffic backbone.</strong>
+              The modality encoder and FiLM layers modulate intermediate features.
+              Near-identity initialization keeps the model close to its pretrained behavior at the start of adaptation.
+              <a href="https://arxiv.org/pdf/2607.00545#page=3">Paper, Fig. 2</a>.
             </p>
           </article>
 
-          <article class="card figure-card figure-card-wide">
+          <details class="card method-details">
+            <summary>How are behavior latents learned? <span>BehaviorVAE details</span></summary>
+            <div class="details-content">
             <div class="figure-image-wrap">
               <img
                 class="figure-image"
                 src="./assets/BehaviorVAE.png?v=2"
+                loading="lazy"
                 alt="BehaviorVAE overview diagram."
               />
             </div>
             <p class="figure-caption">
-              <strong>Fig. 3:</strong> BehaviorVAE overview. Agent trajectories and
-              scene context are encoded into a Gaussian latent posterior;
-              reparameterized per-agent latents are decoded for trajectory
-              reconstruction and exported as paired latent codes in a single forward
-              pass.
+              <strong>BehaviorVAE</strong> encodes trajectories together with scene context into per-agent latent codes.
+              It is trained separately on 10,000 WOMD scenarios; the paired-data percentages below refer to control-adapter training.
+              <a href="https://arxiv.org/pdf/2607.00545#page=6">Paper, Fig. 3</a>.
             </p>
-          </article>
-
-          <article class="card figure-card figure-card-wide">
-            <div class="figure-image-wrap">
-              <img
-                class="figure-image"
-                src="./assets/contextmatch.png?v=2"
-                alt="Context-match retrieval pipeline diagram."
-              />
             </div>
-            <p class="figure-caption">
-              <strong>Fig. 4:</strong> Context-Match Retrieval Pipeline. Query agents
-              are encoded into a shared embedding space. Following heuristic filtering
-              for dynamic feasibility, candidates are ranked via similarity scoring to
-              retrieve the Top-K environmentally compatible scenarios from the dataset.
-            </p>
-          </article>
+          </details>
         </div>
+      </section>
+
+      <section class="section" id="results">
+        <div class="section-heading">
+          <h2>Control across backbones</h2>
+          <p>All control adapters below use 1% paired control data.</p>
+        </div>
+        <div class="card results-card">
+          <div class="table-scroll" role="region" aria-label="Control results across backbones" tabindex="0">
+            <table aria-describedby="main-results-note">
+              <caption>Table 1 · WOSAC controllable simulation <a href="https://arxiv.org/pdf/2607.00545#page=10">Source</a></caption>
+              <thead><tr><th scope="col">Control</th><th scope="col">Trainable params</th><th scope="col">Meta ↑</th><th scope="col">mADE (m) ↓</th><th scope="col">mADE gain ↑</th></tr></thead>
+              <tbody>
+                <tr class="group-row"><th colspan="5" scope="rowgroup">VBD-CL <span>Diffusion</span></th></tr>
+                <tr class="baseline-row"><th scope="row">Unconditional</th><td>12.3M</td><td>0.7186</td><td>2.7223</td><td>—</td></tr>
+                <tr><th scope="row">Sketch</th><td>1.3M</td><td>0.7432</td><td>0.9645</td><td>64.56%</td></tr>
+                <tr><th scope="row">Latent</th><td>1.9M</td><td><strong>0.7440</strong></td><td><strong>0.9221</strong></td><td><strong>66.12%</strong></td></tr>
+                <tr><th scope="row">Text</th><td>1.9M</td><td>0.7306</td><td>2.0005</td><td>26.51%</td></tr>
+              </tbody>
+              <tbody>
+                <tr class="group-row"><th colspan="5" scope="rowgroup">SMART-tiny-CLSFT <span>Autoregressive</span></th></tr>
+                <tr class="baseline-row"><th scope="row">Unconditional</th><td>7.0M</td><td>0.7728</td><td>1.5044</td><td>—</td></tr>
+                <tr><th scope="row">Sketch</th><td>2.1M</td><td><strong>0.7984</strong></td><td><strong>0.2561</strong></td><td><strong>82.97%</strong></td></tr>
+                <tr><th scope="row">Latent</th><td>1.4M</td><td>0.7912</td><td>0.3238</td><td>78.48%</td></tr>
+                <tr><th scope="row">Text</th><td>2.0M</td><td>0.7767</td><td>1.3537</td><td>10.02%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note" id="main-results-note"><strong>Reading the results.</strong> Meta measures distributional realism; mADE is the minimum average displacement error across sampled rollouts. Gain is the relative mADE reduction against each backbone's unconditional baseline. Bold marks the best accuracy and realism metrics within each backbone. Parameter counts are those reported for base-model training or control-adapter training, respectively.</p>
+          <details class="evaluation-details">
+            <summary>Evaluation scope and data accounting</summary>
+            <p>These are ground-truth-derived control evaluations on WOMD under WOSAC, not arbitrary-instruction success rates. The SMART sketch result uses Full-GT conditioning: all GT-valid agents receive controls. Under target-only conditioning, sketch mADE is 0.4602 m and Meta is 0.7898 (<a href="https://arxiv.org/pdf/2607.00545#page=20">Table A2</a>).</p>
+            <p>The 1% refers to paired data for adapter training (approximately 5,000 scenarios), excluding backbone pretraining and separate BehaviorVAE training. Transfer experiments below use the separate 10%-data SMART setting with decoding guidance described in <a href="https://arxiv.org/pdf/2607.00545#page=27">Supplement E.1</a>.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="section" id="efficiency">
+        <div class="section-heading">
+          <h2>How much paired data is needed?</h2>
+          <p>Latent control improves earliest; sketch and text benefit from more supervision.</p>
+        </div>
+        <article class="card figure-card">
+          <a class="figure-link" href="./assets/sample_efficiency_optimized.pdf" aria-label="Open Figure 5 as a full-resolution PDF">
+            <img class="figure-image" src="./assets/sample_efficiency_optimized.png" loading="lazy" alt="Figure 5: SMART sample-efficiency curves for sketch, latent, and text. Top: mADE, lower is better. Bottom: WOSAC Meta realism, higher is better. Training data ranges from 0 to 10%, with 100%-data LoRA reference lines." />
+          </a>
+          <p class="figure-caption"><strong>Fig. 5 · Sample efficiency.</strong> SMART backbone; 0% is the unconditional baseline. The reference lines jointly train the control branch and backbone LoRA adapters using 100% data. Percentages on the curves describe paired control-adapter data. <a href="./assets/sample_efficiency_optimized.pdf">Open PDF</a> · <a href="https://arxiv.org/pdf/2607.00545#page=11">Paper discussion</a>.</p>
+        </article>
+        <details class="card comparison-details">
+          <summary>Comparison with ProSim <span>1% vs. 100% paired control data</span></summary>
+          <div class="details-content">
+            <div class="table-scroll" role="region" aria-label="ProSim comparison" tabindex="0">
+              <table aria-describedby="prosim-note">
+                <caption>Table 2 · Same architecture, different adaptation <a href="https://arxiv.org/pdf/2607.00545#page=10">Source</a></caption>
+                <thead><tr><th scope="col">Method</th><th scope="col">Paired data</th><th scope="col">Meta ↑</th><th scope="col">mADE (m) ↓</th><th scope="col">mADE gain ↑</th></tr></thead>
+                <tbody>
+                  <tr class="group-row"><th scope="rowgroup" colspan="5">Original ProSim</th></tr>
+                  <tr class="baseline-row"><th scope="row">Unconditional</th><td>—</td><td>0.704</td><td>2.679</td><td>—</td></tr>
+                  <tr><th scope="row">Sketch</th><td>100%</td><td>0.749</td><td>1.099</td><td>58.96%</td></tr>
+                  <tr><th scope="row">Text</th><td>100%</td><td>0.709</td><td>2.330</td><td>13.03%</td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="group-row"><th scope="rowgroup" colspan="5">ProSim with FiLM adaptation</th></tr>
+                  <tr class="baseline-row"><th scope="row">Unconditional</th><td>—</td><td>0.703</td><td>2.641</td><td>—</td></tr>
+                  <tr><th scope="row">Sketch</th><td>1%</td><td>0.750</td><td>1.130</td><td>57.23%</td></tr>
+                  <tr><th scope="row">Text</th><td>1%</td><td>0.717</td><td>1.824</td><td>30.92%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note" id="prosim-note">FiLM achieves comparable sketch control and stronger text control with less paired supervision. Original ProSim uses the official checkpoint; FiLM uses a separately retrained unconditional ProSim backbone. Gains use each block's own baseline (<a href="https://arxiv.org/pdf/2607.00545#page=27">Supplement E.3</a>).</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="section" id="counterfactual">
+        <div class="section-heading">
+          <h2>One scene, different futures</h2>
+          <p>Transfer different reference intentions to the same target scene.</p>
+        </div>
+        <article class="card figure-card">
+          <a class="figure-link" href="./assets/counterfactual_examples.png" aria-label="Open counterfactual examples at full resolution">
+            <img class="figure-image" src="./assets/counterfactual_examples.png" loading="lazy" alt="Paper Figure A1, scenario 1: reference behaviors for accelerating, turning right, decelerating, and going straight, with their corresponding conditioned trajectories in the same target scene." />
+          </a>
+          <p class="figure-caption">Each column transfers a different reference behavior into the same scene. The query row shows the source behavior; the conditioned row shows the generated future. <a href="https://arxiv.org/pdf/2607.00545#page=18">Paper, Fig. A1 (scenario 1)</a>.</p>
+        </article>
+        <details class="card comparison-details">
+          <summary>Counterfactual results <span>Control, diversity, and driving quality</span></summary>
+          <div class="details-content">
+            <div class="table-scroll" role="region" aria-label="Counterfactual rollout results" tabindex="0">
+              <table aria-describedby="counterfactual-note">
+                <caption>Table 3 · Transferred controls <a href="https://arxiv.org/pdf/2607.00545#page=12">Source</a></caption>
+                <thead><tr><th scope="col">Control</th><th scope="col">Control ADE (m) ↓</th><th scope="col">Success (%) ↑</th><th scope="col">Coverage ↑</th><th scope="col">Collision ↓</th><th scope="col">Offroad ↓</th><th scope="col">PDMScore ↑</th></tr></thead>
+                <tbody>
+                  <tr class="baseline-row"><th scope="row">Unconditional</th><td>—</td><td>—</td><td>201.02</td><td>0.0563</td><td>0.0252</td><td>78.40</td></tr>
+                  <tr><th scope="row">Sketch</th><td>0.3727</td><td>70.61</td><td>287.17</td><td>0.0836</td><td>0.0252</td><td>79.30</td></tr>
+                  <tr><th scope="row">Latent</th><td>0.4542</td><td>73.89</td><td>254.41</td><td>0.0774</td><td>0.0251</td><td>80.33</td></tr>
+                  <tr><th scope="row">Text</th><td>2.4446</td><td>69.84</td><td>282.57</td><td>0.0520</td><td>0.0227</td><td>79.56</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note" id="counterfactual-note">Control ADE measures alignment with the transferred behavior; success measures matching the requested maneuver; coverage measures spatial diversity. Collision and offroad are reported as rates, not percentages. PDMScore is adapted to the controlled agent and does not evaluate traffic-light compliance. This uses the separate 10%-data SMART setting with guidance (<a href="https://arxiv.org/pdf/2607.00545#page=27">Supplement E.1</a>).</p>
+            <p class="table-note">Coverage and PDMScore improve across modalities, but sketch and latent control increase collision rates over the unconditional baseline. Stronger instruction following does not guarantee safer interactions.</p>
+          </div>
+        </details>
       </section>
 
       <section class="section" id="qualitative">
         <div class="section-heading">
-          <h2>Long-tail Scenario generation</h2>
+          <h2>Long-tail Scenario Generation</h2>
+          <p>Match the context, then transfer a reference behavior through its latent code.</p>
         </div>
+        <article class="card figure-card context-card">
+          <img class="figure-image" src="./assets/contextmatch.png?v=2" loading="lazy" alt="Context matching: filter candidates for feasibility, then rank their scene-context similarity to retrieve compatible agents." />
+          <p class="figure-caption">Context matching finds compatible recipients for a reference behavior. The selected target receives latent control; surrounding agents remain unconditioned. <a href="https://arxiv.org/pdf/2607.00545#page=8">Paper, Fig. 4</a>.</p>
+        </article>
         <div class="card selector-card">
           <div class="selector-bar">
             <label class="selector-label" for="scenario-select">Select scenario</label>
@@ -181,27 +276,44 @@
             </div>
             <p class="scenario-id" id="scenario-id"></p>
           </div>
+          <p class="scenario-description" id="scenario-description" aria-live="polite"></p>
+          <p class="scenario-legend"><span class="legend-target" aria-hidden="true"></span> Red: controlled target <span class="legend-reference" aria-hidden="true"></span> Orange: reference agent <span class="legend-context" aria-hidden="true"></span> Blue: surrounding agents · Colored trail: reference trajectory · Control: latent</p>
 
           <div class="showcase-flow" aria-live="polite">
             <section class="media-panel">
-              <p class="panel-title">Base</p>
+              <p class="panel-title">Unconditioned</p>
               <img class="showcase-base" alt="" />
             </section>
 
             <div class="operator" aria-hidden="true">+</div>
 
             <section class="query-panel">
-              <p class="panel-title">Query</p>
+              <p class="panel-title">Reference behavior</p>
               <img class="showcase-query" alt="" />
             </section>
 
             <div class="operator arrow" aria-hidden="true">→</div>
 
             <section class="media-panel">
-              <p class="panel-title">Control</p>
+              <p class="panel-title">Conditioned</p>
               <img class="showcase-control" alt="" />
             </section>
           </div>
+          <noscript><p class="table-note">Enable JavaScript to switch animated examples. The <a href="#video">video</a> also demonstrates scenario generation.</p></noscript>
+        </div>
+        <div class="card results-card longtail-results">
+          <div class="table-scroll" role="region" aria-label="Long-tail context matching results" tabindex="0">
+            <table aria-describedby="longtail-note">
+              <caption>Table 4 · Why context matching matters <a href="https://arxiv.org/pdf/2607.00545#page=13">Source</a></caption>
+              <thead><tr><th scope="col">Context selection</th><th scope="col">Control ADE (m) ↓</th><th scope="col">Collision ↓</th><th scope="col">Offroad ↓</th><th scope="col">PDMScore ↑</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Random</th><td>3.8723</td><td>0.3175</td><td>0.1553</td><td>39.06</td></tr>
+                <tr class="highlight-row"><th scope="row">Context match</th><td>1.6994</td><td>0.1574</td><td>0.0661</td><td>65.27</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note" id="longtail-note">Matching improves transfer accuracy and driving quality relative to random context selection. Collision and offroad are rates (0–1). These are latent-transfer results from the separate 10%-data SMART setting with guidance, not the 1% WOSAC experiment.</p>
+          <p class="table-note"><strong>Limitations.</strong> Rare maneuvers can conflict with surrounding traffic: following a prompt may cause abrupt-braking or at-fault collisions. Behavior transfer here controls one agent at a time. <a href="https://arxiv.org/pdf/2607.00545#page=22">Failure cases and discussion</a>.</p>
         </div>
       </section>
 

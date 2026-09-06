@@ -106,9 +106,22 @@ h1 {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 26px;
+  gap: 10px;
+  margin-top: 20px;
 }
+
+.hero-actions .button {
+  gap: 8px;
+  min-width: 108px;
+  min-height: 40px;
+  padding: 0 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #303236;
+}
+
+.hero-actions .button:hover { background: #17191c; }
+.hero-actions svg { flex-shrink: 0; }
 
 .button,
 .mini-button,
@@ -346,11 +359,9 @@ select {
 
 .showcase-base,
 .showcase-control {
-  aspect-ratio: 1 / 1.04;
-  object-fit: cover;
-  padding: 4px 14px 14px;
-  transform: scale(1.48);
-  transform-origin: center center;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  padding: 12px;
 }
 
 .query-panel {
@@ -360,12 +371,9 @@ select {
 }
 
 .showcase-query {
-  width: auto;
-  max-width: min(100%, 220px);
-  padding: 6px 14px 14px;
+  width: 100%;
+  padding: 12px;
   object-fit: contain;
-  transform: scale(2);
-  transform-origin: center center;
 }
 
 .operator {
@@ -420,6 +428,107 @@ select {
   margin-top: 10px;
 }
 
+.affiliations {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 22px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+#teaser { margin-top: 40px; }
+
+.figure-caption a,
+.table-note a,
+.evaluation-details a,
+caption a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.section { scroll-margin-top: 24px; }
+.section-heading p {
+  max-width: 760px;
+  margin: 12px auto 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.results-card { padding: 26px; }
+.table-scroll { max-width: 100%; overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.93rem;
+  font-variant-numeric: tabular-nums;
+}
+caption {
+  padding: 0 0 18px;
+  text-align: left;
+  font-weight: 700;
+  line-height: 1.6;
+}
+caption a { margin-left: 10px; font-size: 0.8rem; font-weight: 500; }
+th, td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+th:first-child { text-align: left; }
+thead th { color: var(--muted); font-size: 0.8rem; font-weight: 700; }
+tbody th { font-weight: 500; }
+.group-row th { background: var(--surface-soft); font-weight: 800; }
+.group-row span { margin-left: 12px; color: var(--muted); font-size: 0.8rem; font-weight: 500; }
+.baseline-row { color: var(--muted); }
+.highlight-row { background: var(--accent-soft); }
+.table-note,
+.evaluation-details p,
+.scenario-description {
+  margin-top: 16px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 0.9rem;
+}
+.table-note strong { color: var(--text); }
+.evaluation-details { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }
+summary { cursor: pointer; font-weight: 700; line-height: 1.6; }
+summary span { display: block; margin-top: 4px; color: var(--muted); font-size: 0.85rem; font-weight: 400; }
+.comparison-details { margin-top: 22px; }
+.comparison-details > summary,
+.method-details > summary { padding: 22px 26px; }
+.details-content { padding: 0 26px 26px; }
+.evaluation-details summary { font-size: 0.9rem; }
+.figure-link { display: block; border-radius: 12px; }
+.figure-caption { max-width: 100%; }
+.context-card { margin-bottom: 28px; }
+.context-card > img { max-width: 840px; margin: 0 auto; }
+.longtail-results { margin-top: 28px; }
+.scenario-id { background: none; color: var(--muted); font-size: 0.75rem; font-weight: 400; padding: 0; }
+.scenario-legend { margin-top: 12px; color: var(--muted); font-size: 0.78rem; line-height: 1.9; }
+.legend-target, .legend-reference, .legend-context {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 4px 0 8px;
+  border: 1px solid #555;
+  border-radius: 2px;
+}
+.legend-target { background: #e9666d; margin-left: 0; }
+.legend-reference { background: #ffbe4f; }
+.legend-context { background: #bed7ed; }
+.showcase-flow { grid-template-columns: minmax(0, 1fr) 28px minmax(0, 0.85fr) 28px minmax(0, 1fr); gap: 10px; }
+.query-panel { width: 100%; }
+.operator { width: 28px; height: 28px; }
+.panel-title { font-size: 0.69rem; letter-spacing: 0.05em; position: relative; }
+a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visible, .table-scroll:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+
 @media (max-width: 980px) {
   .selector-bar,
   .scenario-meta {
@@ -438,6 +547,8 @@ select {
 
   .arrow {
     transform: rotate(90deg);
+    width: 28px;
+    justify-self: center;
   }
 }
 
@@ -462,9 +573,22 @@ select {
     padding: 20px;
   }
 
+  .results-card, .figure-card { padding: 16px; }
+  .comparison-details > summary, .method-details > summary { padding: 18px; }
+  .details-content { padding: 0 16px 18px; }
+  th, td { padding: 12px; }
+  .figure-caption { font-size: 0.9rem; }
+  .selector-controls { min-width: 0; }
+  select { min-width: 0; max-width: 100%; }
+
   .selector-controls,
   .mini-button,
   select {
     width: 100%;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .button { transition: none; }
 }

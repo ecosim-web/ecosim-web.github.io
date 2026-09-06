@@ -1,7 +1,8 @@
 const scenarios = [
   {
     id: "011",
-    title: "Stopping Car Threading",
+    title: "Stopped-Car Bypass",
+    description: "Transfer a stopped-car bypass behavior. Compare the target's default rollout with the conditioned motion around stopped vehicles.",
     short: "Scenario 01",
     query:
       "./assets/query/query_011_28f915e5f267613d_q1525__cd2ced934eff529d_d239_r12_comparison_static.png",
@@ -12,6 +13,7 @@ const scenarios = [
   {
     id: "035",
     title: "Cyclist Plaza Turn",
+    description: "Transfer a cyclist's turning behavior into a compatible plaza context. Compare the default rollout with the turn induced by the reference latent.",
     short: "Scenario 02",
     query:
       "./assets/query/query_035_3b169f26d15c4914_q1975__8a7281e087e9ffa2_d2211_r6_comparison_static.png",
@@ -22,6 +24,7 @@ const scenarios = [
   {
     id: "088",
     title: "Unsignalized Crossing",
+    description: "Transfer a crossing behavior at an unsignalized intersection. Compare the target's default motion with its conditioned path through the crossing.",
     short: "Scenario 03",
     query:
       "./assets/query/query_088_861485a5735c6b40_q117__fa1c0d98bc18f290_d2612_r29_comparison_static.png",
@@ -32,6 +35,7 @@ const scenarios = [
   {
     id: "116",
     title: "Meandering",
+    description: "Transfer a meandering motion pattern. Compare the unconditioned rollout with the changes in direction induced by the reference behavior.",
     short: "Scenario 04",
     query:
       "./assets/query/query_116_8f5f743b5b1ff851_q110__cb9aca00b2fc880f_d1457_r27_comparison_static.png",
@@ -42,6 +46,7 @@ const scenarios = [
   {
     id: "130",
     title: "Multi-Lane Weaving",
+    description: "Transfer a weaving behavior across multiple lanes. Compare the default rollout with the sequence of lateral maneuvers under latent control.",
     short: "Scenario 05",
     query:
       "./assets/query/query_130_97dc2441f6ed2318_q15__8e8fbe0fdb5b1ded_d157_r11_comparison_static.png",
@@ -52,6 +57,7 @@ const scenarios = [
   {
     id: "163",
     title: "Tight Merging",
+    description: "Transfer a tight-merge behavior into a compatible traffic context. Compare the default rollout with the target's conditioned merging motion.",
     short: "Scenario 06",
     query:
       "./assets/query/query_163_d0d511073be892c8_q62__764cc0f4b15c9c38_d1063_r14_comparison_static.png",
@@ -62,6 +68,7 @@ const scenarios = [
   {
     id: "194",
     title: "Fork Merge Turn",
+    description: "Transfer a fork-merge turning behavior. Compare the default rollout with the conditioned maneuver through the new road layout.",
     short: "Scenario 07",
     query:
       "./assets/query/query_194_e4f0f9239a41acb0_q28__1990a2a1f3af41e4_d2820_r15_comparison_static.png",
@@ -72,6 +79,7 @@ const scenarios = [
   {
     id: "231",
     title: "Aggressive U-turn Parking",
+    description: "Transfer an aggressive U-turn behavior. Compare the default rollout with the sharp reversal induced by the reference latent.",
     short: "Scenario 08",
     query:
       "./assets/query/query_231_e730e70ec662302f_q1848__53489c151a69167c_d2166_r22_comparison_static.png",
@@ -85,6 +93,7 @@ const select = document.querySelector("#scenario-select");
 const title = document.querySelector("#scenario-title");
 const shortLabel = document.querySelector("#scenario-short");
 const idLabel = document.querySelector("#scenario-id");
+const description = document.querySelector("#scenario-description");
 const baseImage = document.querySelector(".showcase-base");
 const queryImage = document.querySelector(".showcase-query");
 const controlImage = document.querySelector(".showcase-control");
@@ -123,13 +132,14 @@ function renderScenario(index) {
   title.textContent = scenario.title;
   shortLabel.textContent = scenario.short;
   idLabel.textContent = `ID ${scenario.id}`;
+  description.textContent = scenario.description;
 
   preloadAsset(scenario.base);
   preloadAsset(scenario.control);
   preloadAsset(scenario.query);
 
   swapImage(baseImage, scenario.base, `${scenario.title} base simulation`, true);
-  swapImage(queryImage, scenario.query, `${scenario.title} condition image`);
+  swapImage(queryImage, scenario.query, `${scenario.title}: orange reference agent and colored reference trajectory`);
   swapImage(controlImage, scenario.control, `${scenario.title} controlled simulation`, true);
 }
 
@@ -138,10 +148,6 @@ scenarios.forEach((scenario, index) => {
   option.value = scenario.id;
   option.textContent = `${scenario.short} - ${scenario.title}`;
   select.appendChild(option);
-  preloadAsset(scenario.base);
-  preloadAsset(scenario.control);
-  preloadAsset(scenario.query);
-
   if (index === 0) {
     renderScenario(0);
   }
